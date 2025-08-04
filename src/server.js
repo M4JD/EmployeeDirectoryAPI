@@ -4,8 +4,9 @@ import { errorHandler } from "./middleware/index.js";
 import config from "./config/config.js";
 import cors from "cors";
 import { fetchEmployees } from "./services/employee-service.js";
+import Logger from "./utils/logger.js";
 
-
+const logger = new Logger("server")
 const app = express();
 
 app.use(express.json());
@@ -13,12 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors(config.corsOptions));
 
-app.use(employeeRouter);
+app.use("/employee", employeeRouter);
 
 app.use(errorHandler);
 
 let server = app.listen(config.PORT, () => {
-    console.log(`Server is running on port ${config.PORT}`);
+    logger.debug(`Server is running on port ${config.PORT}`);
     // fetch dummy data
     fetchEmployees()
 });
@@ -26,7 +27,7 @@ let server = app.listen(config.PORT, () => {
 const exitHandler = () => {
     if (server) {
         server.close(() => {
-            console.info("Server closed");
+            logger.info("Server closed");
             process.exit(1);
         });
     } else {
@@ -35,7 +36,7 @@ const exitHandler = () => {
 };
 
 const unexpectedErrorHandler = (error) => {
-    console.error(error);
+    logger.error({ error });
     exitHandler();
 };
 

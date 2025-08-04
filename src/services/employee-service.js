@@ -1,8 +1,9 @@
 import Employee from "../models/employee-model.js";
+import Logger from "../utils/logger.js";
 
 const departments = ["Engineering", "Marketing", "HR", "Finance"];
 const titles = ["Engineer", "Manager", "Analyst", "Coordinator"];
-
+const logger = new Logger('employee-service');
 let employeeCache = [];
 
 const fetchEmployees = async () => {
@@ -27,12 +28,12 @@ const fetchEmployees = async () => {
             departments[Math.floor(Math.random() * departments.length)],
             titles[Math.floor(Math.random() * titles.length)],
         ));
-
-        console.log({ users, employeeCache })
-        console.log("Employee data fetched and cached.");
     } catch (error) {
-        console.error("Error fetching employee data:", error);
+        logger.error("Error fetching employee data:", error);
     }
 };
+const getCachedEmployees = () => {
+    return employeeCache;
+};
 
-export { fetchEmployees };
+export { fetchEmployees, getCachedEmployees };
