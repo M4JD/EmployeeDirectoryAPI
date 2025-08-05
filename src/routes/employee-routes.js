@@ -3,8 +3,8 @@ import { addEmployee, deleteEmployee, getEmployee, getEmployees, updateEmployee 
 import { authMiddleware } from "../middleware/index.js";
 const employeeRouter = Router();
 
-employeeRouter.get("/employees", authMiddleware, getEmployees);
-employeeRouter.get("/", authMiddleware, getEmployee);
+employeeRouter.get("/", authMiddleware, getEmployees);
+employeeRouter.get("/:id", authMiddleware, getEmployee);
 
 employeeRouter.post("/", authMiddleware, addEmployee);
 employeeRouter.put("/", authMiddleware, updateEmployee);

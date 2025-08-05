@@ -1,23 +1,37 @@
-import { getCachedEmployees } from "../services/employee-service.js";
+import ApiStatusesEnum from "../enums/api-statuses.enum.js";
+import Employee from "../models/employee-model.js";
+import { addEmployeeToCache, deleteCachedEmployee, getCachedEmployeeById, getCachedEmployees, updateCachedEmployee } from "../services/employee-service.js";
 import Logger from "../utils/logger.js";
-import { buildErrorResponse, buildSuccessResponse } from "./response-handler.js";
+import { buildSuccessResponse } from "./response-handler.js";
 const logger = new Logger('employee-controller');
+
 const getEmployees = async (req, res) => {
-    return res.json({});
+    const employeeCache = getCachedEmployees();
+    return buildSuccessResponse(res, employeeCache);
 };
+
 const getEmployee = async (req, res) => {
-    try {
-        const employeeCache = getCachedEmployees();
-        const response = buildSuccessResponse(employeeCache, 200);
-        return res.json(response);
-    } catch (e) {
-        const response = buildErrorResponse(e);
-        return res.json(response);
-    }
+    const employeeId = req.params.id;
+    const employee = getCachedEmployeeById(employeeId);
+    return buildSuccessResponse(res, employee);
 };
-const addEmployee = async (req, res) => { };
-const updateEmployee = async (req, res) => { };
-const deleteEmployee = async (req, res) => { };
+
+const addEmployee = async (req, res) => {
+    // req.body.
+    const newEmployee = new Employee();
+    const status = addEmployeeToCache(newEmployee);
+    if (!status)
+        return buildSuccessResponse(res, {}, ApiStatusesEnum.noContent);
+    else
+        return buildSuccessResponse(res, newEmployee, ApiStatusesEnum.created);
+};
+
+const updateEmployee = async (req, res) => {
+    updateCachedEmployee
+};
+const deleteEmployee = async (req, res) => {
+    deleteCachedEmployee
+};
 
 export {
     getEmployee,

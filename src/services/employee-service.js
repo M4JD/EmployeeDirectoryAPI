@@ -32,8 +32,37 @@ const fetchEmployees = async () => {
         logger.error("Error fetching employee data:", error);
     }
 };
+
 const getCachedEmployees = () => {
     return employeeCache;
 };
 
-export { fetchEmployees, getCachedEmployees };
+const getCachedEmployeeById = (id) => {
+    return employeeCache.find(employee => employee.id === id);
+};
+
+const addEmployeeToCache = (employee) => {
+    try {
+        employeeCache.push(employee);
+        return true;
+    } catch (e) {
+        return true;
+    }
+};
+
+const updateCachedEmployee = (employee) => {
+    try {
+        const employeeToUpdate = getCachedEmployeeById(employee.id);
+        if (employeeToUpdate)
+            employeeToUpdate = { ...employee };
+        return true;
+    } catch (e) {
+        return true;
+    }
+};
+
+const deleteCachedEmployee = (id) => {
+
+}
+
+export { fetchEmployees, getCachedEmployees, getCachedEmployeeById, addEmployeeToCache, updateCachedEmployee, deleteCachedEmployee };

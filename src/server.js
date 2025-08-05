@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors(config.corsOptions));
 
-app.use("/employee", employeeRouter);
+app.use("/api/employee", employeeRouter);
 
 app.use(errorHandler);
 
