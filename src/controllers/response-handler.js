@@ -3,22 +3,22 @@ import Logger from "../utils/logger.js";
 
 const logger = new Logger("error-handler");
 const buildErrorResponse = (res, error) => {
-    let { statusCode, message } = err;
+    let { statusCode, message } = error;
     if (process.env.NODE_ENV === "production" && !err.isOperational) {
         statusCode = ApiStatusesEnum.error; // Internal Server Error
         message = "Something went wrong!";//use generic error message after logging the real error for ref
     }
 
-    res.locals.errorMessage = err.message;
+    res.locals.errorMessage = error.message;
 
     const response = {
         code: statusCode,
         message,
-        ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+        ...(process.env.NODE_ENV === "development" && { stack: error.stack }),
     };
 
     if (process.env.NODE_ENV === "development") {
-        console.error(err);
+        console.error(error);
     }
 
     return res

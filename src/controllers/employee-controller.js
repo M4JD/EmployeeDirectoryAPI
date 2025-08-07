@@ -7,7 +7,20 @@ const logger = new Logger('employee-controller');
 
 const getEmployees = async (req, res) => {
     const employeeCache = getCachedEmployees();
-    return buildSuccessResponse(res, employeeCache);
+    let page = parseInt(req.query.p);
+    let pageSize = parseInt(req.query.s);
+    if (!page) { page = 1; }
+    if (!pageSize) { pageSize = 10; }
+    const pageCount = Math.ceil(employeeCache.length / 10);
+    if (page > pageCount) {
+        page = pageCount
+    }
+    const pagedList = employeeCache.slice(page * pageSize - pageSize, page * pageSize)
+    return buildSuccessResponse(res, {
+        "page": page,
+        "pageCount": pageCount,
+        "employees": pagedList
+    });
 };
 
 const getEmployee = async (req, res) => {
